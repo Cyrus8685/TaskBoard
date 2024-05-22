@@ -5,6 +5,10 @@ var openTask = document.getElementById("addTask");
 var closeTask = document.getElementById("closeButton");
 var cardTask = document.getElementById("newTask");
 var dateTask = document.getElementById("dateInput");
+var newDuedate= document.getElementById('datepicker-1').value;
+var newTitle= document.getElementById('titleInput').value;
+var newDescription= document.getElementById('descriptionInput').value;
+let submitBtn = document.getElementById("submit-btn");
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -17,6 +21,7 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard() {
+
   const Title = [];
   let currentTitles = JSON.parse(localStorage.getItem('Title'));
   
@@ -28,20 +33,19 @@ function createTaskCard() {
     currentTitles.length = 0;
   };
   
-  const newTitle= document.getElementById('titleInput').value;
-  
+  var newTitle= document.getElementById('titleInput').value;
   if (newTitle == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault();
     alert("Please enter your Task Title");}
   
     else {
   if (currentTitles === null) {
     Title.push(newTitle);
-    localStorage.setItem('Title', JSON.stringify(Title));
+    var finalTitle = `${Title}`;
   
   } else {
   currentTitles.push(newTitle);
-  localStorage.setItem('Title', JSON.stringify(currentTitles));
+  var finalTitle = `${currentTitles}`;
   }
     };
 
@@ -56,20 +60,19 @@ function createTaskCard() {
        currentDuedates.length = 0;
   };
   
-  const newDuedate= document.getElementById('datepicker-1').value;
+  var newDuedate= document.getElementById('datepicker-1').value;
   if (newDuedate == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault();
     alert("Please enter your Task Due Date");}
   
     else {
   
   if (currentDuedates === null) {
       Duedate.push(newDuedate);
-    localStorage.setItem('Duedate', JSON.stringify(Users));
-  
+      var finalDuedate = `${Duedate}`;
   } else {
   currentDuedates.push(newDuedate);
-  localStorage.setItem('Duedate', JSON.stringify(currentDuedates));
+  var finalDuedate = `${currentDuedates}`;
   }
     };
 
@@ -83,26 +86,132 @@ function createTaskCard() {
     currentDescription.length = 0;
   };
   
-  const newDescription= document.getElementById('descriptionInput').value;
+  var newDescription= document.getElementById('descriptionInput').value;
   if (newDescription == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault();
     alert("Please enter your Task Description");} 
   
     else {
   if (currentDescription === null) {
       Description.push(newDescription);
-    localStorage.setItem('Content', JSON.stringify(Description));
+      var finalDescription = `${Description}`;
   } 
   else {
     currentDescription.push(newDescription);
-  localStorage.setItem('Description', JSON.stringify(currentDescription));
-  }}  
+    var finalDescription = `${currentDescription}`;;
+  }}
+  
+    var taskId = generateTaskId();
+
+  const newTask = {
+            TaskId: `${taskId}`,
+            Title: `${finalTitle}`,
+            Duedate: `${finalDuedate}`,
+            Description: `${finalDescription}`,
+  }
+   
+  localStorage.setItem(`NewTask`, JSON.stringify(newTask));
+
 }
 
+
  // Todo: create a function to render the task list and make cards draggable
-function renderTaskList() {
-    
+ submitBtn.addEventListener("click",  async function renderTaskList() {
+// assign value of taskid id as Javascript id for each element created to can be trageted to delete element
+// use insertBefore on id=todo-cards
+$( function() {
+  $( "#draggable" ).draggable();
+} );
+
+const randomColor = function(){
+  const hex = '0123456789ABCDEF'; //hex colors range
+  let color = '#';
+  for(let i=0;i<6;i++){
+    color += hex[Math.floor(Math.random()*16)];
+  }
+  return color;
 }
+  var taskId = generateTaskId();
+  let taskList = JSON.parse(localStorage.getItem('NewTask'));
+  let toDocard = document.getElementById("todo-cards");
+
+  var taskCardparentDiv = document.createElement("div");
+  taskCardparentDiv.id = `${taskId}`;
+  taskCardparentDiv.id = "draggable";
+  taskCardparentDiv.class = "modal";
+  taskCardparentDiv.style = "width: 18rem;";
+  taskCardparentDiv.style.backgroundColor = randomColor();
+  toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
+
+  taskCarddialogDiv = document.createElement("div");
+  taskCarddialogDiv.id = `${taskId}`;
+  taskCarddialogDiv.class = "modal-dialog";
+  taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
+
+  taskCardcontentDiv = document.createElement("div");
+  taskCardcontentDiv.id = `${taskId}`;
+  taskCardcontentDiv.class = "modal-content";
+  taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
+
+
+  taskCardheaderDiv = document.createElement("div");
+  taskCardheaderDiv.id = `${taskId}`;
+  taskCardheaderDiv.class = "modal-header";
+  taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
+
+  var taskCardtitle = document.createElement("h6");
+  taskCardtitle.id = `${taskId}`;
+  taskCardtitle.class = "taskCard";
+  taskCardtitle.class = "modal-title";
+  const cardTitle = document.createTextNode(`${taskList.Title}`);
+  taskCardtitle.appendChild(cardTitle);
+  taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
+
+  taskCardbodyDiv = document.createElement("div");
+  taskCardbodyDiv.id = `${taskId}`;
+  taskCardbodyDiv.class = "modal-body";
+  taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
+
+  taskCardbodyForm = document.createElement("form");
+  taskCardbodyForm.id = `${taskId}`;
+  taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
+
+  taskCardformDiv1 = document.createElement("div");
+  taskCardformDiv1.id = `${taskId}`;
+  taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
+
+  var taskCardDescription = document.createElement("label");
+  taskCardDescription.id = `${taskId}`;
+  taskCardDescription.class = "taskCardDescription";
+  taskCardDescription.class = "modal-title";
+  const cardDescription = document.createTextNode(`${taskList.Description}`);
+  taskCardDescription.appendChild(cardDescription);
+  taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
+
+  taskCardformDiv2 = document.createElement("div");
+  taskCardformDiv2.id = `${taskId}`;
+  taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
+
+  var taskCarddueDate = document.createElement("p2");
+  taskCarddueDate.id = `${taskId}`;
+  taskCarddueDate.class = "taskCarddueDate";
+  const cardDuedate = document.createTextNode(`${taskList.Duedate}`);
+  taskCarddueDate.appendChild(cardDuedate);
+  taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
+
+  taskCardbuttonDiv = document.createElement("div");
+  taskCardbuttonDiv.id = `${taskId}`;
+  taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
+
+  var taskCarddeleteButton = document.createElement("button");
+  taskCarddeleteButton.id = `${taskId}`;
+  taskCarddeleteButton.class = "taskCarddeleteButton";
+  taskCarddeleteButton.class = "btn btn-primary";
+  taskCarddeleteButton.type = "button";
+  taskCarddeleteButton.toggle = "modal";
+  taskCardbuttonDiv.insertAdjacentElement("beforeend", taskCarddeleteButton);
+
+});
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
 // create array of object for user input

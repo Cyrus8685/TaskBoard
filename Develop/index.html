@@ -18,7 +18,7 @@
       <button class="btn btn-success"  id="addTask" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
-    <div id="formModal"  id="newTask" class="modal">
+    <div id="formModal"  id="newTask" class="modal" style="width: 18rem;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -41,7 +41,7 @@
                     </form>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="createTaskCard()">Add Task</button>
+                    <button type="button" id="submit-btn" class="btn btn-primary" data-bs-toggle="modal" onclick="createTaskCard()">Add Task</button>
                 </div>
             </div>
         </div>             

@@ -98,7 +98,7 @@ function createTaskCard() {
   } 
   else {
     currentDescription.push(newDescription);
-    var finalDescription = `${currentDescription}`;;
+    var finalDescription = `${currentDescription}`;
   }}
   
     var taskId = generateTaskId();
@@ -112,17 +112,15 @@ function createTaskCard() {
    
   localStorage.setItem(`NewTask`, JSON.stringify(newTask));
 
+document.getElementById('datepicker-1').value = "";
+document.getElementById('titleInput').value = "";
+document.getElementById('descriptionInput').value = "";
 }
-
 
  // Todo: create a function to render the task list and make cards draggable
  submitBtn.addEventListener("click",  async function renderTaskList() {
 // assign value of taskid id as Javascript id for each element created to can be trageted to delete element
 // use insertBefore on id=todo-cards
-$( function() {
-  $( "#draggable" ).draggable();
-} );
-
 const randomColor = function(){
   const hex = '0123456789ABCDEF'; //hex colors range
   let color = '#';
@@ -136,31 +134,31 @@ const randomColor = function(){
   let toDocard = document.getElementById("todo-cards");
 
   var taskCardparentDiv = document.createElement("div");
-  taskCardparentDiv.id = `${taskId}`;
-  taskCardparentDiv.id = "draggable";
+  taskCardparentDiv.itemid = `${taskId}`;
+  taskCardparentDiv.draggable = "true";
   taskCardparentDiv.class = "modal";
   taskCardparentDiv.style = "width: 18rem;";
   taskCardparentDiv.style.backgroundColor = randomColor();
   toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
 
   taskCarddialogDiv = document.createElement("div");
-  taskCarddialogDiv.id = `${taskId}`;
+  taskCarddialogDiv.itemid = `${taskId}`;
   taskCarddialogDiv.class = "modal-dialog";
   taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
 
   taskCardcontentDiv = document.createElement("div");
-  taskCardcontentDiv.id = `${taskId}`;
+  taskCardcontentDiv.itemid = `${taskId}`;
   taskCardcontentDiv.class = "modal-content";
   taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
 
 
   taskCardheaderDiv = document.createElement("div");
-  taskCardheaderDiv.id = `${taskId}`;
+  taskCardheaderDiv.itemid = `${taskId}`;
   taskCardheaderDiv.class = "modal-header";
   taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
 
   var taskCardtitle = document.createElement("h6");
-  taskCardtitle.id = `${taskId}`;
+  taskCardtitle.itemid = `${taskId}`;
   taskCardtitle.class = "taskCard";
   taskCardtitle.class = "modal-title";
   const cardTitle = document.createTextNode(`${taskList.Title}`);
@@ -168,20 +166,20 @@ const randomColor = function(){
   taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
 
   taskCardbodyDiv = document.createElement("div");
-  taskCardbodyDiv.id = `${taskId}`;
+  taskCardbodyDiv.itemid = `${taskId}`;
   taskCardbodyDiv.class = "modal-body";
   taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
 
   taskCardbodyForm = document.createElement("form");
-  taskCardbodyForm.id = `${taskId}`;
+  taskCardbodyForm.itemid = `${taskId}`;
   taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
 
   taskCardformDiv1 = document.createElement("div");
-  taskCardformDiv1.id = `${taskId}`;
+  taskCardformDiv1.itemid = `${taskId}`;
   taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
 
   var taskCardDescription = document.createElement("label");
-  taskCardDescription.id = `${taskId}`;
+  taskCardDescription.itemid = `${taskId}`;
   taskCardDescription.class = "taskCardDescription";
   taskCardDescription.class = "modal-title";
   const cardDescription = document.createTextNode(`${taskList.Description}`);
@@ -189,22 +187,22 @@ const randomColor = function(){
   taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
 
   taskCardformDiv2 = document.createElement("div");
-  taskCardformDiv2.id = `${taskId}`;
+  taskCardformDiv2.itemid = `${taskId}`;
   taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
 
   var taskCarddueDate = document.createElement("p2");
-  taskCarddueDate.id = `${taskId}`;
+  taskCarddueDate.itemid = `${taskId}`;
   taskCarddueDate.class = "taskCarddueDate";
   const cardDuedate = document.createTextNode(`${taskList.Duedate}`);
   taskCarddueDate.appendChild(cardDuedate);
   taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
 
   taskCardbuttonDiv = document.createElement("div");
-  taskCardbuttonDiv.id = `${taskId}`;
+  taskCardbuttonDiv.itemid = `${taskId}`;
   taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
 
   var taskCarddeleteButton = document.createElement("button");
-  taskCarddeleteButton.id = `${taskId}`;
+  taskCarddeleteButton.itemid = `${taskId}`;
   taskCarddeleteButton.class = "taskCarddeleteButton";
   taskCarddeleteButton.class = "btn btn-primary";
   taskCarddeleteButton.type = "button";
@@ -215,6 +213,7 @@ const randomColor = function(){
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
 // create array of object for user input
+// I included this functionality in the renderTaskList ()
 }
 
 // Todo: create a function to handle deleting a task

@@ -35,8 +35,7 @@ import {
 	scrollBy,
 	clone,
 	expando,
-	getChildContainingRectFromElement,
-	getParentOrHost
+	getChildContainingRectFromElement
 } from './utils.js';
 
 
@@ -782,7 +781,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 					target = parent; // store last element
 				}
 				/* jshint boss:true */
-				while (parent = getParentOrHost(parent));
+				while (parent = parent.parentNode);
 			}
 
 			_unhideGhostForTarget();
@@ -1961,8 +1960,7 @@ Sortable.utils = {
 	nextTick: _nextTick,
 	cancelNextTick: _cancelNextTick,
 	detectDirection: _detectDirection,
-	getChild,
-	expando
+	getChild
 };
 
 

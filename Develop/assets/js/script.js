@@ -7,13 +7,24 @@ var newTitle= document.getElementById('titleInput').value;
 var newDescription= document.getElementById('descriptionInput').value;
 const submitBtn = document.getElementById("submit-btn");
 var present_date = JSON.parse(localStorage.getItem('Duedate'));
-var list1 = document.getElementsByClassName('list1');
-var list2 = document.getElementsByClassName('list2');
-var list3 = document.getElementsByClassName('list3');
 var taskListArray = [];
 taskListArray.push(taskList);
 let index = 0;
 var color = '';
+
+
+  function cardPostion() {
+
+  $('td').click(function(){
+    alert( $(this).attr('id') );
+ });
+
+  var li = $( "div" ).last();
+  var offset = li.offset();
+  localStorage.setItem('LeftOffset', `${offset.left}`);
+  localStorage.setItem('TopOffset', `${offset.top}`);
+}
+
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -126,9 +137,7 @@ let Title = JSON.parse(localStorage.getItem('Title'));
 let Description = JSON.parse(localStorage.getItem('Description'));
 let DueDate = JSON.parse(localStorage.getItem('Duedate'));
 var taskId = generateTaskId();
-let toDocard = document.getElementById("to-do cards");
-let LeftOffset = localStorage.setItem('LeftOffset', `${offset.left}`);
-let TopOffset = localStorage.setItem('TopOffset', `${offset.top}`);
+let toDocard = document.getElementById("Steve");
 
 
 const dateColor = function(){
@@ -178,11 +187,13 @@ let date2 = new Date(`${DueDate[index]}`);
    return color;  
 
 }
-  
-    var taskCardparentDiv = document.createElement("li");
+let LeftOffset = localStorage.getItem('LeftOffset');
+let TopOffset = localStorage.getItem('TopOffset');  
+var taskCardparentDiv = document.createElement("div");
+    
     if (LeftOffset !== null) {
-    taskCardparentDiv.left = `${LeftOffsetOffset[index]}`;
-    taskCardparentDiv.top = `${TopOffsetOffsetOffset[index]}`;};
+    taskCardparentDiv.left = `${LeftOffset[index]}`;
+    taskCardparentDiv.top = `${TopOffset[index]}`;};
     taskCardparentDiv.id = `${taskId}`;
     taskCardparentDiv.setAttribute("class", `${taskId}`);
     taskCardparentDiv.style = "width: 18rem;";
@@ -270,26 +281,18 @@ function handleDeleteTask(event){
 // delete task. used the uuid to target the specific task
 }
 
+function sortFunction() {
 // Todo: create a function to handle dropping a task into a new status lane
 
-function cardPostion() {
+var el = document.getElementById('Steve');
+var el2 = document.getElementById('James');
+var el3 = document.getElementById('Walter');
 
-  $('td').click(function(){
-    alert( $(this).attr('id') );
- });
+  var sortable1 = Sortable.create(el);
+  var sortable2= Sortable.create(el2);
+  var sortable3= Sortable.create(el3);
 
-  var li = $( "li" ).last();
-  var offset = li.offset();
-  localStorage.setItem('LeftOffset', `${offset.left}`);
-  localStorage.setItem('TopOffset', `${offset.top}`);
-
-}
-
-
- function sortFunction() {
-  if (list1 !== null) {
-
-  Sortable(list1), {
+  var sortable1 =  new Sortable(el, el2, el3, {
     multiDrag: true, // Enable the plugin
     selectedClass: "sortable-selected", // Class name for selected item
     multiDragKey: null, // Key that must be down for items to be selected
@@ -304,50 +307,10 @@ function cardPostion() {
     onDeselect: function(evt) {
       evt.item.forEach(element => {
         cardPostion(element);
-      })}}
-
-  Sortable(list2), {
-    multiDrag: true, // Enable the plugin
-    selectedClass: "sortable-selected", // Class name for selected item
-    multiDragKey: null, // Key that must be down for items to be selected
-    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
-    fallbackTolerance: 3, // So that we can select items on mobile
-    animation: 150,
-    
-    // Called when an item is selected
-    onSelect: function(/**Event*/evt) {
-      evt.item // The selected item
-    },
-  
-    // Called when an item is deselected
-    onDeselect: function(/**Event*/evt) {
-      evt.item.forEach(element => {
-        cardPostion(element);
-      })}}
+      })}})
+    console.log("Sortted");
+    };
 // The deselected item
-
-
-  Sortable(list3), {
-    multiDrag: true, // Enable the plugin
-    selectedClass: "sortable-selected", // Class name for selected item
-    multiDragKey: null, // Key that must be down for items to be selected
-    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
-    fallbackTolerance: 3, // So that we can select items on mobile
-    animation: 150,
-    
-    // Called when an item is selected
-    onSelect: function(/**Event*/evt) {
-      evt.item // The selected item
-    },
-  
-    // Called when an item is deselected
-    onDeselect: function(/**Event*/evt) {
-      evt.item.forEach(element => {
-        cardPostion(element);
-      })}
- // The deselected item
-    }}};
-
 /*function handleDrop(this) {
 
     function handleDragStart(this) {
@@ -385,19 +348,20 @@ function cardPostion() {
       item.addEventListener('drop', handleDrop);
     });
   };*/
+  
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $( document ).ready(function () {
   $(function() {
     $( "#datepicker-1" ).datepicker();
+    sortFunction();
 })
 
  if (taskList !== null) {
   taskList.forEach(element => {
   renderTaskList(element);
   index+1;
-  });
-  sortFunction();
+  })
  }
-})
+});
 

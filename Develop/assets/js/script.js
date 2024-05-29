@@ -2,26 +2,18 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("Title"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
-var openTask = document.getElementById("addTask");
-var closeTask = document.getElementById("closeButton");
-var cardTask = document.getElementById("newTask");
-var dateTask = document.getElementById("dateInput");
 var newDuedate= document.getElementById('datepicker-1').value;
 var newTitle= document.getElementById('titleInput').value;
 var newDescription= document.getElementById('descriptionInput').value;
-let submitBtn = document.getElementById("submit-btn");
+const submitBtn = document.getElementById("submit-btn");
+var present_date = JSON.parse(localStorage.getItem('Duedate'));
+var list1 = document.getElementsByClassName('list1');
+var list2 = document.getElementsByClassName('list2');
+var list3 = document.getElementsByClassName('list3');
 var taskListArray = [];
 taskListArray.push(taskList);
-
-const randomColor = function(){
-  const hex = '0123456789ABCDEF'; //hex colors range
-  let color = '#';
-  for(let i=0;i<6;i++){
-    color += hex[Math.floor(Math.random()*16)];
-  }
-  return color;
-};
-
+let index = 0;
+var color = '';
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -33,7 +25,8 @@ function generateTaskId() {
 }
 
 // Todo: create a function to create a task card
-function createTaskCard() {
+submitBtn.addEventListener("click",  async function createTaskCard() {
+
   const Title = [];
   let currentTitles = JSON.parse(localStorage.getItem('Title'));
   
@@ -48,7 +41,7 @@ function createTaskCard() {
   const newTitle= document.getElementById('titleInput').value;
   
   if (newTitle == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault;
     alert("Please enter your Task Title");}
   
     else {
@@ -75,7 +68,7 @@ function createTaskCard() {
   
   const newDuedate= document.getElementById('datepicker-1').value;
   if (newDuedate == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault;
     alert("Please enter your Task Due Date");}
   
     else {
@@ -102,7 +95,7 @@ function createTaskCard() {
   
   const newDescription= document.getElementById('descriptionInput').value;
   if (newDescription == "") {
-    submit.preventDefault();
+    submitBtn.preventDefault;
     alert("Please enter your Task Description");} 
   
     else {
@@ -113,17 +106,18 @@ function createTaskCard() {
   else {
     currentDescription.push(newDescription);
   localStorage.setItem('Description', JSON.stringify(currentDescription));
-  }}  
-}
+  }} 
+
+  renderTaskList();
+});
+
 
  // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 
-  let Title = JSON.parse(localStorage.getItem('Title'));
+    let Title = JSON.parse(localStorage.getItem('Title'));
 
-  let index = 0;
-  
-  if (index < Title.length) {
+    if (index < Title.length) {
 
 // assign value of taskid id as Javascript id for each element created to can be trageted to delete element
 // use insertBefore on id=todo-cards
@@ -131,95 +125,144 @@ function renderTaskList() {
 let Title = JSON.parse(localStorage.getItem('Title'));
 let Description = JSON.parse(localStorage.getItem('Description'));
 let DueDate = JSON.parse(localStorage.getItem('Duedate'));
+var taskId = generateTaskId();
+let toDocard = document.getElementById("to-do cards");
+let LeftOffset = localStorage.setItem('LeftOffset', `${offset.left}`);
+let TopOffset = localStorage.setItem('TopOffset', `${offset.top}`);
 
-    var taskId = generateTaskId();
-    let toDocard = document.getElementById("todo-cards");
+
+const dateColor = function(){
+
+  // Date object
+const date = new Date();
+
+let currentDay= String(date.getDate()).padStart(2, '0');
+
+let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+
+let currentYear = date.getFullYear();
+
+// we will display the date as DD-MM-YYYY 
+
+let date1 = new Date(`${currentMonth}/${currentDay}/${currentYear}`);
+
+let date2 = new Date(`${DueDate[index]}`);
+
   
-    var taskCardparentDiv = document.createElement("div");
-    taskCardparentDiv.itemid = `${taskId}`;
-    taskCardparentDiv.draggable = "true";
-    taskCardparentDiv.class = "modal";
+  // Calculating the time difference
+  // of two dates
+  let Difference_In_Time =
+      date2.getTime() - date1.getTime();
+  
+  // Calculating the no. of days between
+  // two dates
+  let Difference_In_Days =
+      Math.round
+          (Difference_In_Time / (1000 * 3600 * 24));
+  
+
+// To display the final_result value
+
+   if ((Difference_In_Days) < 0) {
+    color = "#FF0000";
+   }
+
+   else if ((Difference_In_Days) <= 3) {
+    color = "#FFFF00";
+   }
+
+   else {
+    color = "#FFFFFF";
+   }
+   console.log(color)
+   return color;  
+
+}
+  
+    var taskCardparentDiv = document.createElement("li");
+    if (LeftOffset !== null) {
+    taskCardparentDiv.left = `${LeftOffsetOffset[index]}`;
+    taskCardparentDiv.top = `${TopOffsetOffsetOffset[index]}`;};
+    taskCardparentDiv.id = `${taskId}`;
+    taskCardparentDiv.setAttribute("class", `${taskId}`);
     taskCardparentDiv.style = "width: 18rem;";
-    taskCardparentDiv.style.backgroundColor = randomColor();
     toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
-  
-    taskCarddialogDiv = document.createElement("div");
-    taskCarddialogDiv.itemid = `${taskId}`;
-    taskCarddialogDiv.class = "modal-dialog";
+
+    var taskCarddialogDiv = document.createElement("div");
+    taskCarddialogDiv.id = `${taskId}`;
+    taskCarddialogDiv.setAttribute("class", "modal-dialog");
     taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
   
-    taskCardcontentDiv = document.createElement("div");
-    taskCardcontentDiv.itemid = `${taskId}`;
-    taskCardcontentDiv.class = "modal-content";
+    var taskCardcontentDiv = document.createElement("div");
+    taskCardcontentDiv.id = `${taskId}`;
+    taskCardcontentDiv.setAttribute("class", "modal-content");
+    taskCardcontentDiv.style.backgroundColor = dateColor();
     taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
   
   
-    taskCardheaderDiv = document.createElement("div");
-    taskCardheaderDiv.itemid = `${taskId}`;
-    taskCardheaderDiv.class = "modal-header";
+    var taskCardheaderDiv = document.createElement("div");
+    taskCardheaderDiv.id = `${taskId}`;
+    taskCardheaderDiv.setAttribute("class", "modal-header");
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
   
     var taskCardtitle = document.createElement("h6");
-    taskCardtitle.itemid = `${taskId}`;
-    taskCardtitle.class = "taskCard";
-    taskCardtitle.class = "modal-title";
-    const cardTitle = document.createTextNode(`${Title[index]}`);
-
+    taskCardtitle.id = `${taskId}`;
+    taskCardtitle.setAttribute("class", "taskCardtitle");
+    taskCardtitle.setAttribute("class", "modal-title");
+    cardTitle = document.createTextNode(`${Title[index]}`);
     taskCardtitle.appendChild(cardTitle);
     taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
   
-    taskCardbodyDiv = document.createElement("div");
-    taskCardbodyDiv.itemid = `${taskId}`;
-    taskCardbodyDiv.class = "modal-body";
+    var taskCardbodyDiv = document.createElement("div");
+    taskCardbodyDiv.id = `${taskId}`;
+    taskCardbodyDiv.setAttribute("class", "modal-body");
+    taskCardbodyDiv.style.borderTopColor = "#000000" ;
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
   
-    taskCardbodyForm = document.createElement("form");
+    var taskCardbodyForm = document.createElement("form");
     taskCardbodyForm.itemid = `${taskId}`;
     taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
   
-    taskCardformDiv1 = document.createElement("div");
+    var taskCardformDiv1 = document.createElement("div");
     taskCardformDiv1.itemid = `${taskId}`;
     taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
   
     var taskCardDescription = document.createElement("label");
-    taskCardDescription.itemid = `${taskId}`;
-    taskCardDescription.class = "taskCardDescription";
-    taskCardDescription.class = "modal-title";
-    const cardDescription = document.createTextNode(`${Description[index]}`);
+    taskCardDescription.id = `${taskId}`;
+    taskCardDescription.setAttribute("class", "modal-title");
+    cardDescription = document.createTextNode(`${Description[index]}`);
     taskCardDescription.appendChild(cardDescription);
     taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
   
-    taskCardformDiv2 = document.createElement("div");
+    var taskCardformDiv2 = document.createElement("div");
     taskCardformDiv2.itemid = `${taskId}`;
     taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
   
     var taskCarddueDate = document.createElement("p2");
     taskCarddueDate.itemid = `${taskId}`;
-    taskCarddueDate.class = "taskCarddueDate";
-    const cardDuedate = document.createTextNode(`${DueDate[index]}`);
+    taskCarddueDate.setAttribute("class", "taskCarddueDate");
+    cardDuedate = document.createTextNode(`${DueDate[index]}`);
     taskCarddueDate.appendChild(cardDuedate);
     taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
   
-    taskCardbuttonDiv = document.createElement("div");
+    var taskCardbuttonDiv = document.createElement("div");
     taskCardbuttonDiv.itemid = `${taskId}`;
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
   
     var taskCarddeleteButton = document.createElement("button");
     taskCarddeleteButton.itemid = `${taskId}`;
-    taskCarddeleteButton.class = "taskCarddeleteButton";
-    taskCarddeleteButton.class = "btn btn-primary";
-    taskCarddeleteButton.type = "button";
-    taskCarddeleteButton.toggle = "modal";
+    taskCarddeleteButton.setAttribute("class", "btn-close");
     taskCardbuttonDiv.insertAdjacentElement("beforeend", taskCarddeleteButton);
-  
-  index++;
-}
 
+}
+index++;
 };
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
 // create array of object for user input
-// I included this functionality in the renderTasklist ()
+
+// I included this functionality in the renderTasklist()
+
 }
 
 // Todo: create a function to handle deleting a task
@@ -228,18 +271,133 @@ function handleDeleteTask(event){
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
-//    use jqueru ui
+
+function cardPostion() {
+
+  $('td').click(function(){
+    alert( $(this).attr('id') );
+ });
+
+  var li = $( "li" ).last();
+  var offset = li.offset();
+  localStorage.setItem('LeftOffset', `${offset.left}`);
+  localStorage.setItem('TopOffset', `${offset.top}`);
+
 }
+
+
+ function sortFunction() {
+  if (list1 !== null) {
+
+  Sortable(list1), {
+    multiDrag: true, // Enable the plugin
+    selectedClass: "sortable-selected", // Class name for selected item
+    multiDragKey: null, // Key that must be down for items to be selected
+    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
+    fallbackTolerance: 3, // So that we can select items on mobile
+    animation: 150,
+    
+    // Called when an item is selected
+    onSelect: function(evt) {},
+    // The selected item
+    // Called when an item is deselected
+    onDeselect: function(evt) {
+      evt.item.forEach(element => {
+        cardPostion(element);
+      })}}
+
+  Sortable(list2), {
+    multiDrag: true, // Enable the plugin
+    selectedClass: "sortable-selected", // Class name for selected item
+    multiDragKey: null, // Key that must be down for items to be selected
+    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
+    fallbackTolerance: 3, // So that we can select items on mobile
+    animation: 150,
+    
+    // Called when an item is selected
+    onSelect: function(/**Event*/evt) {
+      evt.item // The selected item
+    },
+  
+    // Called when an item is deselected
+    onDeselect: function(/**Event*/evt) {
+      evt.item.forEach(element => {
+        cardPostion(element);
+      })}}
+// The deselected item
+
+
+  Sortable(list3), {
+    multiDrag: true, // Enable the plugin
+    selectedClass: "sortable-selected", // Class name for selected item
+    multiDragKey: null, // Key that must be down for items to be selected
+    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
+    fallbackTolerance: 3, // So that we can select items on mobile
+    animation: 150,
+    
+    // Called when an item is selected
+    onSelect: function(/**Event*/evt) {
+      evt.item // The selected item
+    },
+  
+    // Called when an item is deselected
+    onDeselect: function(/**Event*/evt) {
+      evt.item.forEach(element => {
+        cardPostion(element);
+      })}
+ // The deselected item
+    }}};
+
+/*function handleDrop(this) {
+
+    function handleDragStart(this) {
+      this.style.opacity = '0.4';
+    }
+  
+    function handleDragEnd(this) {
+      this.style.opacity = '1';
+  
+      items.forEach(function (item) {
+        item.classList.remove('over');
+      });
+    }
+  
+    function handleDragOver(this) {
+      this.preventDefault();
+      return false;
+    }
+  
+    function handleDragEnter(this) {
+      this.classList.add('over');
+    }
+  
+    function handleDragLeave(this) {
+      this.classList.remove('over');
+    }
+  
+    let items = document.querySelectorAll(`[id*="target-container"]`);
+    items.forEach(function(item) {
+      item.addEventListener('dragstart', handleDragStart);
+      item.addEventListener('dragover', handleDragOver);
+      item.addEventListener('dragenter', handleDragEnter);
+      item.addEventListener('dragleave', handleDragLeave);
+      item.addEventListener('dragend', handleDragEnd);
+      item.addEventListener('drop', handleDrop);
+    });
+  };*/
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $( document ).ready(function () {
   $(function() {
     $( "#datepicker-1" ).datepicker();
- });
+})
 
- taskList.forEach(element => {
+ if (taskList !== null) {
+  taskList.forEach(element => {
   renderTaskList(element);
-});
+  index+1;
+  });
+  sortFunction();
+ }
+})
 
-});

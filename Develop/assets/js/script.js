@@ -137,7 +137,7 @@ let Title = JSON.parse(localStorage.getItem('Title'));
 let Description = JSON.parse(localStorage.getItem('Description'));
 let DueDate = JSON.parse(localStorage.getItem('Duedate'));
 var taskId = generateTaskId();
-let toDocard = document.getElementById("Steve");
+let toDocard = document.getElementById("to-do-cards");
 
 
 const dateColor = function(){
@@ -202,6 +202,7 @@ var taskCardparentDiv = document.createElement("div");
     var taskCarddialogDiv = document.createElement("div");
     taskCarddialogDiv.id = `${taskId}`;
     taskCarddialogDiv.setAttribute("class", "modal-dialog");
+    taskCarddialogDiv.setAttribute("draggable", "true");
     taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
   
     var taskCardcontentDiv = document.createElement("div");
@@ -284,19 +285,13 @@ function handleDeleteTask(event){
 function sortFunction() {
 // Todo: create a function to handle dropping a task into a new status lane
 
-var el = document.getElementById('Steve');
-var el2 = document.getElementById('James');
-var el3 = document.getElementById('Walter');
+var el = document.getElementById('to-do-cards');
+var el2 = document.getElementById('in-progress-cards');
+var el3 = document.getElementById('done-cards');
 
-  var sortable1 = Sortable.create(el);
-  var sortable2= Sortable.create(el2);
-  var sortable3= Sortable.create(el3);
-
-  var sortable1 =  new Sortable(el, el2, el3, {
-    multiDrag: true, // Enable the plugin
+  Sortable.create(el, {
+    group: 'shared',
     selectedClass: "sortable-selected", // Class name for selected item
-    multiDragKey: null, // Key that must be down for items to be selected
-    avoidImplicitDeselect: false, // true - if you don't want to deselect items on outside click
     fallbackTolerance: 3, // So that we can select items on mobile
     animation: 150,
     
@@ -307,8 +302,41 @@ var el3 = document.getElementById('Walter');
     onDeselect: function(evt) {
       evt.item.forEach(element => {
         cardPostion(element);
-      })}})
-    console.log("Sortted");
+      })}}),
+
+      Sortable.create(el2, {
+        group: 'shared',
+        selectedClass: "sortable-selected", // Class name for selected item
+        fallbackTolerance: 3, // So that we can select items on mobile
+        animation: 150,
+        
+        // Called when an item is selected
+        onSelect: function(evt) {},
+        // The selected item
+        // Called when an item is deselected
+        onDeselect: function(evt) {
+          evt.item.forEach(element => {
+            cardPostion(element);
+          })}})
+
+          Sortable.create(el3, {
+            group: 'shared',
+            selectedClass: "sortable-selected", // Class name for selected item
+            fallbackTolerance: 3, // So that we can select items on mobile
+            animation: 150,
+            
+            // Called when an item is selected
+            onSelect: function(evt) {},
+            // The selected item
+            // Called when an item is deselected
+            onDeselect: function(evt) {
+              evt.item.forEach(element => {
+                cardPostion(element);
+              })}})
+
+
+      
+    console.log("Sortted")
     };
 // The deselected item
 /*function handleDrop(this) {

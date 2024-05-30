@@ -24,3 +24,18 @@ body {
      padding: 0%;
      height: 100%;
 }
+
+.in-progress-cards{
+    padding: 0%;
+    height: 100%;
+}
+
+.to-do-cards{
+  padding: 0%;
+  height: 100%;
+}
+
+.done-cards{
+    padding: 0%;
+    height: 100%;
+}

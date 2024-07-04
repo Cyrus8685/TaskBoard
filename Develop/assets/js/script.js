@@ -1,30 +1,12 @@
 // Retrieve tasks and nextId from localStorage
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("Title"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 var newDuedate= document.getElementById('datepicker-1').value;
 var newTitle= document.getElementById('titleInput').value;
 var newDescription= document.getElementById('descriptionInput').value;
 const submitBtn = document.getElementById("submit-btn");
-var present_date = JSON.parse(localStorage.getItem('Duedate'));
-var taskListArray = [];
-taskListArray.push(taskList);
 let index = 0;
 var color = '';
-
-
-  function cardPostion() {
-
-  $('td').click(function(){
-    alert( $(this).attr('id') );
- });
-
-  var li = $( "div" ).last();
-  var offset = li.offset();
-  localStorage.setItem('LeftOffset', `${offset.left}`);
-  localStorage.setItem('TopOffset', `${offset.top}`);
-}
-
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -37,238 +19,45 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 submitBtn.addEventListener("click",  async function createTaskCard() {
-
-  const Title = [];
-  let currentTitles = JSON.parse(localStorage.getItem('Title'));
-  
-  if (currentTitles == null) {
-    currentTitles = [];
-  };
-  
-  if (currentTitles.length >= 5) {
-    currentTitles.length = 0;
-  };
-  
-  const newTitle= document.getElementById('titleInput').value;
-  
-  if (newTitle == "") {
-    submitBtn.preventDefault;
-    alert("Please enter your Task Title");}
-  
-    else {
-  if (currentTitles === null) {
-    Title.push(newTitle);
-    localStorage.setItem('Title', JSON.stringify(Title));
-  
-  } else {
-  currentTitles.push(newTitle);
-  localStorage.setItem('Title', JSON.stringify(currentTitles));
-  }
+    
+    if (localStorage.length >= 15) {
+      localStorage.clear();
     };
+    
+    var newTitle= document.getElementById('titleInput').value;
+    if (newTitle == "") {
+      submitBtn.preventDefault();
+      alert("Please enter your Task Title");}
+    
+    var newDuedate= document.getElementById('datepicker-1').value;
+    if (newDuedate == "") {
+      submitBtn.preventDefault();
+      alert("Please enter your Task Due Date");}
+    
+    var newDescription= document.getElementById('descriptionInput').value;
+    if (newDescription == "") {
+      submitBtn.preventDefault();
+      alert("Please enter your Task Description");} 
 
-  const Duedate = [];
-  let currentDuedates = JSON.parse(localStorage.getItem('Duedate'));
-  
-  if (currentDuedates == null) {
-       currentDuedates = [];
-  };
-  
-  if (currentDuedates.length >= 5) {
-       currentDuedates.length = 0;
-  };
-  
-  const newDuedate= document.getElementById('datepicker-1').value;
-  if (newDuedate == "") {
-    submitBtn.preventDefault;
-    alert("Please enter your Task Due Date");}
-  
-    else {
-  
-  if (currentDuedates === null) {
-      Duedate.push(newDuedate);
-    localStorage.setItem('Duedate', JSON.stringify(Duedate));
-  
-  } else {
-  currentDuedates.push(newDuedate);
-  localStorage.setItem('Duedate', JSON.stringify(currentDuedates));
-  }
-    };
 
-  const Description = [];
-  let currentDescription = JSON.parse(localStorage.getItem('Description'));
-  if (currentDescription == null) {
-    currentDescription = [];
+  var taskId = generateTaskId();
+
+  const newTask = {
+            TaskId: `${taskId}`,
+            Title: `${newTitle}`,
+            Duedate: `${newDuedate}`,
+            Description: `${newDescription}`
   }
-  
-  if (currentDescription.length >= 5) {
-    currentDescription.length = 0;
-  };
-  
-  const newDescription= document.getElementById('descriptionInput').value;
-  if (newDescription == "") {
-    submitBtn.preventDefault;
-    alert("Please enter your Task Description");} 
-  
-    else {
-  if (currentDescription === null) {
-      Description.push(newDescription);
-    localStorage.setItem('Description', JSON.stringify(Description));
-  } 
-  else {
-    currentDescription.push(newDescription);
-  localStorage.setItem('Description', JSON.stringify(currentDescription));
-  }} 
+  console.log(newTask);
+   
+  localStorage.setItem([`${taskId}`], JSON.stringify(newTask));
 
   renderTaskList();
-});
+}),
 
 
  // Todo: create a function to render the task list and make cards draggable
-function renderTaskList() {
 
-    let Title = JSON.parse(localStorage.getItem('Title'));
-
-    if (index < Title.length) {
-
-// assign value of taskid id as Javascript id for each element created to can be trageted to delete element
-// use insertBefore on id=todo-cards
-
-let Title = JSON.parse(localStorage.getItem('Title'));
-let Description = JSON.parse(localStorage.getItem('Description'));
-let DueDate = JSON.parse(localStorage.getItem('Duedate'));
-var taskId = generateTaskId();
-let toDocard = document.getElementById("to-do-cards");
-
-
-const dateColor = function(){
-
-  // Date object
-const date = new Date();
-
-let currentDay= String(date.getDate()).padStart(2, '0');
-
-let currentMonth = String(date.getMonth()+1).padStart(2,"0");
-
-let currentYear = date.getFullYear();
-
-// we will display the date as DD-MM-YYYY 
-
-let date1 = new Date(`${currentMonth}/${currentDay}/${currentYear}`);
-
-let date2 = new Date(`${DueDate[index]}`);
-
-  
-  // Calculating the time difference
-  // of two dates
-  let Difference_In_Time =
-      date2.getTime() - date1.getTime();
-  
-  // Calculating the no. of days between
-  // two dates
-  let Difference_In_Days =
-      Math.round
-          (Difference_In_Time / (1000 * 3600 * 24));
-  
-
-// To display the final_result value
-
-   if ((Difference_In_Days) < 0) {
-    color = "#FF0000";
-   }
-
-   else if ((Difference_In_Days) <= 3) {
-    color = "#FFFF00";
-   }
-
-   else {
-    color = "#FFFFFF";
-   }
-   console.log(color)
-   return color;  
-
-}
-let LeftOffset = localStorage.getItem('LeftOffset');
-let TopOffset = localStorage.getItem('TopOffset');  
-var taskCardparentDiv = document.createElement("div");
-    
-    if (LeftOffset !== null) {
-    taskCardparentDiv.left = `${LeftOffset[index]}`;
-    taskCardparentDiv.top = `${TopOffset[index]}`;};
-    taskCardparentDiv.id = `${taskId}`;
-    taskCardparentDiv.setAttribute("class", `${taskId}`);
-    taskCardparentDiv.style = "width: 18rem;";
-    toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
-
-    var taskCarddialogDiv = document.createElement("div");
-    taskCarddialogDiv.id = `${taskId}`;
-    taskCarddialogDiv.setAttribute("class", "modal-dialog");
-    taskCarddialogDiv.setAttribute("draggable", "true");
-    taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
-  
-    var taskCardcontentDiv = document.createElement("div");
-    taskCardcontentDiv.id = `${taskId}`;
-    taskCardcontentDiv.setAttribute("class", "modal-content");
-    taskCardcontentDiv.style.backgroundColor = dateColor();
-    taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
-  
-  
-    var taskCardheaderDiv = document.createElement("div");
-    taskCardheaderDiv.id = `${taskId}`;
-    taskCardheaderDiv.setAttribute("class", "modal-header");
-    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
-  
-    var taskCardtitle = document.createElement("h6");
-    taskCardtitle.id = `${taskId}`;
-    taskCardtitle.setAttribute("class", "taskCardtitle");
-    taskCardtitle.setAttribute("class", "modal-title");
-    cardTitle = document.createTextNode(`${Title[index]}`);
-    taskCardtitle.appendChild(cardTitle);
-    taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
-  
-    var taskCardbodyDiv = document.createElement("div");
-    taskCardbodyDiv.id = `${taskId}`;
-    taskCardbodyDiv.setAttribute("class", "modal-body");
-    taskCardbodyDiv.style.borderTopColor = "#000000" ;
-    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
-  
-    var taskCardbodyForm = document.createElement("form");
-    taskCardbodyForm.itemid = `${taskId}`;
-    taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
-  
-    var taskCardformDiv1 = document.createElement("div");
-    taskCardformDiv1.itemid = `${taskId}`;
-    taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
-  
-    var taskCardDescription = document.createElement("label");
-    taskCardDescription.id = `${taskId}`;
-    taskCardDescription.setAttribute("class", "modal-title");
-    cardDescription = document.createTextNode(`${Description[index]}`);
-    taskCardDescription.appendChild(cardDescription);
-    taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
-  
-    var taskCardformDiv2 = document.createElement("div");
-    taskCardformDiv2.itemid = `${taskId}`;
-    taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
-  
-    var taskCarddueDate = document.createElement("p2");
-    taskCarddueDate.itemid = `${taskId}`;
-    taskCarddueDate.setAttribute("class", "taskCarddueDate");
-    cardDuedate = document.createTextNode(`${DueDate[index]}`);
-    taskCarddueDate.appendChild(cardDuedate);
-    taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
-  
-    var taskCardbuttonDiv = document.createElement("div");
-    taskCardbuttonDiv.itemid = `${taskId}`;
-    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
-  
-    var taskCarddeleteButton = document.createElement("button");
-    taskCarddeleteButton.itemid = `${taskId}`;
-    taskCarddeleteButton.setAttribute("class", "btn-close");
-    taskCardbuttonDiv.insertAdjacentElement("beforeend", taskCarddeleteButton);
-
-}
-index++;
-};
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
 // create array of object for user input
@@ -294,6 +83,7 @@ var el3 = document.getElementById('done-cards');
     selectedClass: "sortable-selected", // Class name for selected item
     fallbackTolerance: 3, // So that we can select items on mobile
     animation: 150,
+    ghostClass: "columnOne",
     
     // Called when an item is selected
     onSelect: function(evt) {},
@@ -302,82 +92,226 @@ var el3 = document.getElementById('done-cards');
     onDeselect: function(evt) {
       evt.item.forEach(element => {
         cardPostion(element);
-      })}}),
+      })},
+    
+  
+      
+      onAdd: function (evt) {
+        dragElementId = evt.item.id,
+        console.log(dragElementId),
+        UpdatedTaskCardString= JSON.parse(localStorage.getItem(dragElementId)),
+        console.log(UpdatedTaskCardString),
+        UpdatedTaskCardString.Index = evt.newDraggableIndex,
+        console.log(UpdatedTaskCardString),
+        UpdatedTaskCardString.Columns = "columnOne",
+     console.log(UpdatedTaskCardString),
+     localStorage.setItem(dragElementId,  JSON.stringify(UpdatedTaskCardString)) 
+       },
+
+    })
 
       Sortable.create(el2, {
         group: 'shared',
         selectedClass: "sortable-selected", // Class name for selected item
         fallbackTolerance: 3, // So that we can select items on mobile
         animation: 150,
+          ghostClass: "columnTwo",
         
-        // Called when an item is selected
-        onSelect: function(evt) {},
-        // The selected item
-        // Called when an item is deselected
-        onDeselect: function(evt) {
-          evt.item.forEach(element => {
-            cardPostion(element);
-          })}})
+          onAdd: function (evt) {
+            dragElementId = evt.item.id,
+            console.log(dragElementId),
+            UpdatedTaskCardString= JSON.parse(localStorage.getItem(dragElementId)),
+            console.log(UpdatedTaskCardString),
+            UpdatedTaskCardString.Index = evt.newDraggableIndex,
+            console.log(UpdatedTaskCardString),
+            UpdatedTaskCardString.Columns = "columnTwo",
+         console.log(UpdatedTaskCardString),
+         localStorage.setItem(dragElementId,  JSON.stringify(UpdatedTaskCardString)) 
+          },
+        
+        })
+
+          
 
           Sortable.create(el3, {
             group: 'shared',
             selectedClass: "sortable-selected", // Class name for selected item
             fallbackTolerance: 3, // So that we can select items on mobile
             animation: 150,
+            ghostClass: "columnThree",
             
             // Called when an item is selected
-            onSelect: function(evt) {},
+            onSelect: function() {},
             // The selected item
             // Called when an item is deselected
-            onDeselect: function(evt) {
-              evt.item.forEach(element => {
-                cardPostion(element);
-              })}})
+            onAdd: function (evt) {
+              dragElementId = evt.item.id,
+              console.log(dragElementId),
+              UpdatedTaskCardString= JSON.parse(localStorage.getItem(dragElementId)),
+              console.log(UpdatedTaskCardString),
+              UpdatedTaskCardString.Index = evt.newDraggableIndex,
+              console.log(UpdatedTaskCardString),
+              UpdatedTaskCardString.Columns = "columnThree",
+           console.log(UpdatedTaskCardString),
+           localStorage.setItem(dragElementId,  JSON.stringify(UpdatedTaskCardString)) 
+}}),
 
 
       
     console.log("Sortted")
     };
-// The deselected item
-/*function handleDrop(this) {
 
-    function handleDragStart(this) {
-      this.style.opacity = '0.4';
-    }
+    function renderTaskList() {
   
-    function handleDragEnd(this) {
-      this.style.opacity = '1';
+      if (index < localStorage.length) {
   
-      items.forEach(function (item) {
-        item.classList.remove('over');
-      });
-    }
-  
-    function handleDragOver(this) {
-      this.preventDefault();
-      return false;
-    }
-  
-    function handleDragEnter(this) {
-      this.classList.add('over');
-    }
-  
-    function handleDragLeave(this) {
-      this.classList.remove('over');
-    }
-  
-    let items = document.querySelectorAll(`[id*="target-container"]`);
-    items.forEach(function(item) {
-      item.addEventListener('dragstart', handleDragStart);
-      item.addEventListener('dragover', handleDragOver);
-      item.addEventListener('dragenter', handleDragEnter);
-      item.addEventListener('dragleave', handleDragLeave);
-      item.addEventListener('dragend', handleDragEnd);
-      item.addEventListener('drop', handleDrop);
-    });
-  };*/
-  
+  // assign value of taskid id as Javascript id for each element created to can be trageted to delete element
+  // use insertBefore on id=todo-cards
+  let toDocard = document.getElementById("to-do-cards");
+  var el2 = document.getElementById('in-progress-cards');
+var el3 = document.getElementById('done-cards');
 
+keys = localStorage.key(index);
+console.log(keys);
+ key = JSON.parse(localStorage.getItem(keys));
+ console.log(key.Index);
+ console.log(key.Columns);
+  
+  
+  const dateColor = function(){
+  
+    // Date object
+  const date = new Date();
+  
+  let currentDay= String(date.getDate()).padStart(2, '0');
+  
+  let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+  
+  let currentYear = date.getFullYear();
+  
+  // we will display the date as DD-MM-YYYY 
+  
+  let date1 = new Date(`${currentMonth}/${currentDay}/${currentYear}`);
+  
+  let date2 = new Date(key.Duedate);
+  
+    
+    // Calculating the time difference
+    // of two dates
+    let Difference_In_Time =
+        date2.getTime() - date1.getTime();
+    
+    // Calculating the no. of days between
+    // two dates
+    let Difference_In_Days =
+        Math.round
+            (Difference_In_Time / (1000 * 3600 * 24));
+    
+  
+  // To display the final_result value
+  
+     if ((Difference_In_Days) < 0) {
+      color = "#FF0000";
+     }
+  
+     else if ((Difference_In_Days) <= 3) {
+      color = "#FFFF00";
+     }
+  
+     else {
+      color = "#FFFFFF";
+     }
+     console.log(color)
+     return color;  
+  
+  }
+
+    var taskCardparentDiv = document.createElement("div");
+    taskCardparentDiv.id = key.TaskId;
+    taskCardparentDiv.draggable = "true";
+    taskCardparentDiv.className = "card taskCardparentDiv";
+    taskCardparentDiv.style = "width: 18rem;";
+    taskCardparentDiv.style.backgroundColor = dateColor();
+
+    if (key.Index) {taskCardparentDiv.selectedIndex = key.Index};
+    if (key.Columns && key.Columns.includes('columnOne')) {toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
+    } else if (key.Columns && key.Columns.includes('columnTwo')) { el2.insertAdjacentElement("beforeend", taskCardparentDiv);
+    } else if (key.Columns && key.Columns.includes('columnThree')) { el3.insertAdjacentElement("beforeend", taskCardparentDiv);
+    } else {toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
+    }; 
+  
+    taskCarddialogDiv = document.createElement("div");
+    taskCarddialogDiv.id = key.TaskId;
+    taskCarddialogDiv.className = "modal-dialog";
+    taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
+  
+    taskCardcontentDiv = document.createElement("div");
+    taskCardcontentDiv.id =  key.TaskId;
+    taskCardcontentDiv.className = "modal-content";
+    taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
+  
+  
+    taskCardheaderDiv = document.createElement("div");
+    taskCardheaderDiv.id =  key.TaskId;
+    taskCardheaderDiv.className = "modal-header";
+    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
+  
+    var taskCardtitle = document.createElement("h6");
+    taskCardtitle.id =  key.TaskId;
+    taskCardtitle.className = "taskCard";
+    taskCardtitle.className = "modal-title";
+    const cardTitle = document.createTextNode(key.Title);
+    taskCardtitle.appendChild(cardTitle);
+    taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
+  
+    taskCardbodyDiv = document.createElement("div");
+    taskCardbodyDiv.id =  key.TaskId;
+    taskCardbodyDiv.className = "modal-body";
+    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
+  
+    taskCardbodyForm = document.createElement("form");
+    taskCardbodyForm.id =  key.TaskId;
+    taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
+  
+    taskCardformDiv1 = document.createElement("div");
+    taskCardformDiv1.id =  key.TaskId;
+    taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
+  
+    var taskCardDescription = document.createElement("label");
+    taskCardDescription.id =  key.TaskId;
+    taskCardDescription.className = "taskCardDescription";
+    taskCardDescription.className = "modal-title";
+    const cardDescription = document.createTextNode(key.Description);
+    taskCardDescription.appendChild(cardDescription);
+    taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
+  
+    taskCardformDiv2 = document.createElement("div");
+    taskCardformDiv2.id =  key.TaskId;
+    taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
+  
+    var taskCarddueDate = document.createElement("p2");
+    taskCarddueDate.id =  key.TaskId;
+    taskCarddueDate.className = "taskCarddueDate";
+    const cardDuedate = document.createTextNode(key.Duedate);
+    taskCarddueDate.appendChild(cardDuedate);
+    taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
+  
+    taskCardbuttonDiv = document.createElement("div");
+    taskCardbuttonDiv.id =  key.TaskId;
+    taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
+  
+    var taskCarddeleteButton = document.createElement("button");
+    taskCarddeleteButton.id =  key.TaskId;
+    taskCarddeleteButton.className = "taskCarddeleteButton";
+    taskCarddeleteButton.className = "btn btn-primary";
+    taskCarddeleteButton.type = "button";
+    taskCardbuttonDiv.insertAdjacentElement("beforeend", taskCarddeleteButton);
+  
+  }
+  index++;
+  };
+
+  
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $( document ).ready(function () {
   $(function() {
@@ -385,11 +319,8 @@ $( document ).ready(function () {
     sortFunction();
 })
 
- if (taskList !== null) {
-  taskList.forEach(element => {
-  renderTaskList(element);
-  index+1;
-  })
- }
-});
+
+for (let i = 0; i < localStorage.length; i++) {
+  renderTaskList(localStorage.key(i));
+}});
 

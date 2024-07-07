@@ -8,6 +8,7 @@ const submitBtn = document.getElementById("submit-btn");
 const addTask = document.getElementById("addTask");
 let Index = 0;
 var color = '';
+localStorage.removeItem("newTask");
 
 // Todo: create a function to generate a unique task id
 function generateTaskId(length) {
@@ -22,11 +23,11 @@ function generateTaskId(length) {
   return result;
 }
 
-var taskId = generateTaskId();
 
 // Todo: create a function to create a task card
 function createTaskCard() {
 
+  var taskId = generateTaskId();
     
     if (localStorage.length >= 15) {
       localStorage.clear();
@@ -47,6 +48,8 @@ function createTaskCard() {
       submitBtn.preventDefault();
       alert("Please enter your Task Description");} 
 
+    
+
   const newTask = {
             TaskId: `${taskId}`,
             Title: `${newTitle}`,
@@ -55,7 +58,9 @@ function createTaskCard() {
             Columns: "columnOne"
   }
   console.log(newTask);
-  localStorage.setItem(newTask.TaskId, JSON.stringify(newTask));
+
+  localStorage.setItem(`${taskId}`, JSON.stringify(newTask));
+  localStorage.setItem(`newTask`, JSON.stringify(newTask));
 
   handleAddTask();
 
@@ -67,8 +72,9 @@ function createTaskCard() {
 // Todo: create a function to handle adding a new task
 function handleAddTask(){
 
-  let taskList = JSON.parse(localStorage.getItem(`${taskId}`));
+  let taskList = JSON.parse(localStorage.getItem("newTask"));
   let toDocard = document.getElementById("to-do-cards");
+  console.log(taskList);
 
   const dateColor = function(){
   
@@ -119,7 +125,7 @@ function handleAddTask(){
   }
   
     var taskCardparentDiv = document.createElement("div");
-    taskCardparentDiv.id = `${taskId}`;
+    taskCardparentDiv.id = taskList.TaskId;
     taskCardparentDiv.setAttribute("data-bs-backdrop", "static");
     taskCardparentDiv.draggable = "true";
     taskCardparentDiv.className = "card taskCardparentDiv";
@@ -128,65 +134,65 @@ function handleAddTask(){
     toDocard.insertAdjacentElement("beforeend", taskCardparentDiv);
   
     taskCarddialogDiv = document.createElement("div");
-    taskCarddialogDiv.id = `${taskId}`;
+    taskCarddialogDiv.id = taskList.TaskId;
     taskCarddialogDiv.className = "card-dialog";
     taskCardparentDiv.insertAdjacentElement("beforeend", taskCarddialogDiv);
   
     taskCardcontentDiv = document.createElement("div");
-    taskCardcontentDiv.id = `${taskId}`;
+    taskCardcontentDiv.id = taskList.TaskId;
     taskCardcontentDiv.className = "card-content";
     taskCarddialogDiv.insertAdjacentElement("beforeend", taskCardcontentDiv);
   
   
     taskCardheaderDiv = document.createElement("div");
-    taskCardheaderDiv.id = `${taskId}`;
+    taskCardheaderDiv.id = taskList.TaskId;
     taskCardheaderDiv.className = "card-header";
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardheaderDiv);
   
     var taskCardtitle = document.createElement("h6");
-    taskCardtitle.id = `${taskId}`;
+    taskCardtitle.id = taskList.TaskId;
     taskCardtitle.className = "card-title taskCard";
     const cardTitle = document.createTextNode(`${taskList.Title}`);
     taskCardtitle.appendChild(cardTitle);
     taskCardheaderDiv.insertAdjacentElement("beforeend", taskCardtitle);
   
     taskCardbodyDiv = document.createElement("div");
-    taskCardbodyDiv.id = `${taskId}`;
+    taskCardbodyDiv.id = taskList.TaskId;
     taskCardbodyDiv.className = "card-body";
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbodyDiv);
   
     taskCardbodyForm = document.createElement("form");
-    taskCardbodyForm.id = `${taskId}`;
+    taskCardbodyForm.id = taskList.TaskId;
     taskCardbodyDiv.insertAdjacentElement("beforeend", taskCardbodyForm);
   
     taskCardformDiv1 = document.createElement("div");
-    taskCardformDiv1.id = `${taskId}`;
+    taskCardformDiv1.id = taskList.TaskId;
     taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv1);
   
     var taskCardDescription = document.createElement("label");
-    taskCardDescription.id = `${taskId}`;
+    taskCardDescription.id = taskList.TaskId;
     taskCardDescription.className = "card-title taskCardDescription";
     const cardDescription = document.createTextNode(`${taskList.Description}`);
     taskCardDescription.appendChild(cardDescription);
     taskCardformDiv1.insertAdjacentElement("beforeend", taskCardDescription);
   
     taskCardformDiv2 = document.createElement("div");
-    taskCardformDiv2.id = `${taskId}`;
+    taskCardformDiv2.id = taskList.TaskId;
     taskCardbodyForm.insertAdjacentElement("beforeend", taskCardformDiv2);
   
     var taskCarddueDate = document.createElement("p2");
-    taskCarddueDate.id = `${taskId}`;
+    taskCarddueDate.id = taskList.TaskId;
     taskCarddueDate.className = "taskCarddueDate";
     const cardDuedate = document.createTextNode(`${taskList.Duedate}`);
     taskCarddueDate.appendChild(cardDuedate);
     taskCardformDiv2.insertAdjacentElement("beforeend", taskCarddueDate);
   
     taskCardbuttonDiv = document.createElement("div");
-    taskCardbuttonDiv.id = `${taskId}`;
+    taskCardbuttonDiv.id = taskList.TaskId;
     taskCardcontentDiv.insertAdjacentElement("beforeend", taskCardbuttonDiv);
   
     var taskCarddeleteButton = document.createElement("button");
-    taskCarddeleteButton.id =  `${taskId}`;
+    taskCarddeleteButton.id =  taskList.TaskId;
     taskCarddeleteButton.onclick = function handleDeleteTask(event){
 
       dragElementId = (event.target.id),
@@ -378,6 +384,7 @@ console.log(Index);
       keys = localStorage.key(Index);
       console.log(Index);
       console.log(keys);
+      
        if (keys !== undefined && keys!== null) {key = JSON.parse(localStorage.getItem(keys));}
 
       if (key.Title && key !== undefined) {

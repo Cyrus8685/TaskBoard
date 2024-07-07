@@ -120,6 +120,7 @@ function handleAddTask(){
   
     var taskCardparentDiv = document.createElement("div");
     taskCardparentDiv.id = `${taskId}`;
+    taskCardparentDiv.setAttribute("data-bs-backdrop", "static");
     taskCardparentDiv.draggable = "true";
     taskCardparentDiv.className = "card taskCardparentDiv";
     taskCardparentDiv.style = "width: 18rem;";
@@ -439,6 +440,7 @@ var el3 = document.getElementById('done-cards');
     var taskCardparentDiv = document.createElement("div");
     taskCardparentDiv.id = key.TaskId;
     taskCardparentDiv.draggable = "true";
+    taskCardparentDiv.setAttribute("data-bs-backdrop", "static");
     taskCardparentDiv.className = "card taskCardparentDiv";
     taskCardparentDiv.style = "width: 18rem;";
     taskCardparentDiv.style.backgroundColor = dateColor();

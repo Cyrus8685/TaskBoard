@@ -55,7 +55,7 @@ function createTaskCard() {
             Columns: "columnOne"
   }
   console.log(newTask);
-  localStorage.setItem([`${taskId}`], JSON.stringify(newTask));
+  localStorage.setItem(newTask.TaskId, JSON.stringify(newTask));
 
   handleAddTask();
 

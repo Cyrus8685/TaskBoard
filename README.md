@@ -11,3 +11,7 @@ Created Function to Load Saved Task Cards on Page Load/Refresh
 
 Created function to Delete Cards when the delete button is clicked on the Card
 
+Deployed Websit Link: cyrus8685.github.io/TaskBoard/
+
+Github Repo Link: https://github.com/Cyrus8685/TaskBoard
+
